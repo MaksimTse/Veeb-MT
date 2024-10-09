@@ -6,6 +6,7 @@ namespace Veeb_MT.Controllers
     [ApiController]
     public class PrimitiividController : ControllerBase
     {
+        private Random rand = new Random();
 
         // GET: primitiivid/hello-world
         [HttpGet("hello-world")]
@@ -43,6 +44,31 @@ namespace Veeb_MT.Controllers
             {
                 Console.WriteLine("See on logi nr " + i);
             }
+        }
+
+        // GET: primitiivid/random/5/15
+        [HttpGet("random/{min}/{max}")]
+        public int GetRandomNumber(int min, int max)
+        {
+            return rand.Next(min, max + 1); // Juhuslik arv, mis jääb min ja max vahemikku
+        }
+
+        // GET: primitiivid/calculate-age/1995/06/15
+        [HttpGet("calculate-age/{birthYear}/{birthMonth}/{birthDay}")]
+        public string CalculateAge(int birthYear, int birthMonth, int birthDay)
+        {
+            DateTime today = DateTime.Now;
+            DateTime birthDate = new DateTime(birthYear, birthMonth, birthDay);
+
+            int age = today.Year - birthYear;
+
+            // Kontrollime, kas sünnipäev on juba olnud sel aastal
+            if (today.Month < birthMonth || (today.Month == birthMonth && today.Day < birthDay))
+            {
+                age--;
+            }
+
+            return $"Oled {age} aastat vana.";
         }
     }
 }
