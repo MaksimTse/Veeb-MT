@@ -16,28 +16,30 @@ namespace Veeb_MT.Controllers
         new Toode(5,"Vitamin well", 2.5, true)
         };
 
-
-        // https://localhost:7052/tooted
         [HttpGet]
+
+        // GET /tooted
         public List<Toode> Get()
         {
             return _tooted;
         }
 
+        // GET /tooted/kustuta/1
         [HttpGet("kustuta/{index}")]
         public List<Toode> Delete(int index)
         {
-            _tooted.RemoveAt(index);
+            _tooted.RemoveAt(index-1);
             return _tooted;
         }
 
+        // GET /tooted/kustuta2/1
         [HttpGet("kustuta2/{index}")]
         public string Delete2(int index)
         {
-            _tooted.RemoveAt(index);
+            _tooted.RemoveAt(index-1);
             return "Kustutatud!";
         }
-
+        // GET /tooted/lisa/6/Pepsi/4/true
         [HttpGet("lisa/{id}/{nimi}/{hind}/{aktiivne}")]
         public List<Toode> Add(int id, string nimi, double hind, bool aktiivne)
         {

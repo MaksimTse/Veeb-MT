@@ -42,7 +42,7 @@ namespace Veeb_MT.Controllers
         {
             for (int i = 0; i < arv; i++)
             {
-                Console.WriteLine("See on logi nr " + i);
+                Console.WriteLine("See on logi nr " + (i+1));
             }
         }
 
