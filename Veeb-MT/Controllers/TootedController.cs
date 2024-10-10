@@ -17,7 +17,6 @@ namespace Veeb_MT.Controllers
         };
 
         [HttpGet]
-
         // GET /tooted
         public List<Toode> Get()
         {
@@ -28,7 +27,7 @@ namespace Veeb_MT.Controllers
         [HttpGet("kustuta/{index}")]
         public List<Toode> Delete(int index)
         {
-            _tooted.RemoveAt(index-1);
+            _tooted.RemoveAt(index - 1);
             return _tooted;
         }
 
@@ -36,7 +35,7 @@ namespace Veeb_MT.Controllers
         [HttpGet("kustuta2/{index}")]
         public string Delete2(int index)
         {
-            _tooted.RemoveAt(index-1);
+            _tooted.RemoveAt(index - 1);
             return "Kustutatud!";
         }
         // GET /tooted/lisa/6/Pepsi/4/true
@@ -48,7 +47,8 @@ namespace Veeb_MT.Controllers
             return _tooted;
         }
 
-        [HttpGet("lisa")] // GET /tooted/lisa?id=1&nimi=Koola&hind=1.5&aktiivne=true
+        // GET /tooted/lisa?id=1&nimi=Koola&hind=1.5&aktiivne=true
+        [HttpGet("lisa")]
         public List<Toode> Add2([FromQuery] int id, [FromQuery] string nimi, [FromQuery] double hind, [FromQuery] bool aktiivne)
         {
             Toode toode = new Toode(id, nimi, hind, aktiivne);
@@ -56,7 +56,8 @@ namespace Veeb_MT.Controllers
             return _tooted;
         }
 
-        [HttpGet("hind-dollaritesse/{kurss}")] // GET /tooted/hind-dollaritesse/1.5
+        // GET /tooted/hind-dollaritesse/1.5
+        [HttpGet("hind-dollaritesse/{kurss}")]
         public List<Toode> Dollaritesse(double kurss)
         {
             for (int i = 0; i < _tooted.Count; i++)
@@ -67,8 +68,8 @@ namespace Veeb_MT.Controllers
         }
 
         // või foreachina:
-
-        [HttpGet("hind-dollaritesse2/{kurss}")] // GET /tooted/hind-dollaritesse2/1.5
+        // GET /tooted/hind-dollaritesse2/1.5
+        [HttpGet("hind-dollaritesse2/{kurss}")]
         public List<Toode> Dollaritesse2(double kurss)
         {
             foreach (var t in _tooted)
@@ -79,14 +80,16 @@ namespace Veeb_MT.Controllers
             return _tooted;
         }
 
-        [HttpDelete("kustuta-koik")]
+        // GET /tooted/kustuta-koik
+        [HttpGet("kustuta-koik")]
         public List<Toode> DeleteAll()
         {
             _tooted.Clear();
             return _tooted;
         }
 
-        [HttpPut("muuda-aktiivsus-valeks")]
+        // GET /tooted/muuda-aktiivsus-valeks
+        [HttpGet("muuda-aktiivsus-valeks")]
         public List<Toode> DeactivateAll()
         {
             foreach (var t in _tooted)
@@ -96,6 +99,7 @@ namespace Veeb_MT.Controllers
             return _tooted;
         }
 
+        // GET /tooted/1
         [HttpGet("{index}")]
         public ActionResult<Toode> GetToodeByIndex(int index)
         {
@@ -103,9 +107,10 @@ namespace Veeb_MT.Controllers
             {
                 return NotFound("Toodet ei leitud.");
             }
-            return _tooted[index];
+            return _tooted[index - 1];
         }
 
+        // GET /tooted/korgeim-hind
         [HttpGet("korgeim-hind")]
         public ActionResult<Toode> GetMostExpensiveToode()
         {
@@ -116,6 +121,5 @@ namespace Veeb_MT.Controllers
             var kallimToode = _tooted.OrderByDescending(t => t.Price).FirstOrDefault();
             return kallimToode;
         }
-
     }
 }
