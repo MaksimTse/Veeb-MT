@@ -38,14 +38,29 @@ namespace Veeb_MT.Controllers
             _tooted.RemoveAt(index - 1);
             return "Kustutatud!";
         }
-        // GET /tooted/lisa/6/Pepsi/4/true
-        [HttpGet("lisa/{id}/{nimi}/{hind}/{aktiivne}")]
-        public List<Toode> Add(int id, string nimi, double hind, bool aktiivne)
+
+        // PUT /tooted/uuenda/6/Pepsi/4/true
+        // adds new or updates existed
+        [HttpPut("uuenda/{id}/{nimi}/{hind}/{aktiivne}")]
+        public List<Toode> Update(int id, string nimi, double hind, bool aktiivne)
         {
-            Toode toode = new Toode(id, nimi, hind, aktiivne);
-            _tooted.Add(toode);
+            var existingToode = _tooted.FirstOrDefault(t => t.Id == id);
+
+            if (existingToode != null)
+            {
+                existingToode.Nimi = nimi;
+                existingToode.Price = hind;
+                existingToode.IsActive = aktiivne;
+            }
+            else
+            {
+                Toode toode = new Toode(id, nimi, hind, aktiivne);
+                _tooted.Add(toode);
+            }
+
             return _tooted;
         }
+
 
         // GET /tooted/lisa?id=1&nimi=Koola&hind=1.5&aktiivne=true
         [HttpGet("lisa")]
