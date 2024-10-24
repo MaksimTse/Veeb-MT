@@ -1,76 +1,59 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Veeb_MT.Data;
 using Veeb_MT.Models;
 
 namespace Veeb_MT.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
     public class KasutajadController : ControllerBase
     {
-        private static List<Kasutaja> _kasutajad = new List<Kasutaja>{
-            new Kasutaja(1, "kasutaja1", 1234, "Eesnimi1", "Perenimi1"),
-            new Kasutaja(2, "kasutaja2", 5678, "Eesnimi2", "Perenimi2"),
-            new Kasutaja(3, "kasutaja3", 9101, "Eesnimi3", "Perenimi3")
-        };
+        private readonly ApplicationDbContext _context;
+
+        public KasutajadController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] Kasutaja newUser)
+        {
+            // Логируем полученные данные для отладки
+            Console.WriteLine($"Полученные данные для регистрации: Nimi: {newUser.Nimi}, Eesnimi: {newUser.Eesnimi}, Perenimi: {newUser.Perenimi}");
+
+            // Проверяем, существует ли уже пользователь с таким именем
+            if (await _context.Kasutajad.AnyAsync(k => k.Nimi == newUser.Nimi))
+            {
+                return BadRequest("Username already exists.");
+            }
+
+            // Добавляем нового пользователя в базу данных
+            await _context.Kasutajad.AddAsync(newUser);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { userId = newUser.Id });
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] Kasutaja loginData)
+        {
+            // Ищем пользователя по имени и паролю
+            var user = await _context.Kasutajad
+                .FirstOrDefaultAsync(k => k.Nimi == loginData.Nimi && k.Parool == loginData.Parool);
+
+            if (user == null)
+            {
+                return Unauthorized("Invalid username or password.");
+            }
+
+            return Ok(new { userId = user.Id });
+        }
 
         [HttpGet]
-        // GET /kasutajad
-        public List<Kasutaja> Get()
+        public async Task<List<Kasutaja>> Get()
         {
-            return _kasutajad;
-        }
-
-        // GET /kasutajad/kustuta/1
-        [HttpGet("kustuta/{id}")]
-        public List<Kasutaja> Delete(int id)
-        {
-            var kasutaja = _kasutajad.FirstOrDefault(k => k.Id == id);
-            if (kasutaja != null)
-            {
-                _kasutajad.Remove(kasutaja);
-            }
-            return _kasutajad;
-        }
-
-        // GET /kasutajad/lisa/4/uusKasutaja/9876/Eesnimi4/Perenimi4
-        [HttpGet("lisa/{id}/{nimi}/{parool}/{eesnimi}/{perenimi}")]
-        public List<Kasutaja> Add(int id, string nimi, int parool, string eesnimi, string perenimi)
-        {
-            Kasutaja kasutaja = new Kasutaja(id, nimi, parool, eesnimi, perenimi);
-            _kasutajad.Add(kasutaja);
-            return _kasutajad;
-        }
-
-        // GET /kasutajad/muuda-parooli/1/5678
-        [HttpGet("muuda-parooli/{id}/{uusParool}")]
-        public List<Kasutaja> MuudaParooli(int id, int uusParool)
-        {
-            var kasutaja = _kasutajad.FirstOrDefault(k => k.Id == id);
-            if (kasutaja != null)
-            {
-                kasutaja.Parool = uusParool;
-            }
-            return _kasutajad;
-        }
-
-        // GET /kasutajad/kustuta-koik
-        [HttpGet("kustuta-koik")]
-        public List<Kasutaja> DeleteAll()
-        {
-            _kasutajad.Clear();
-            return _kasutajad;
-        }
-
-        // GET /kasutajad/1
-        [HttpGet("{id}")]
-        public ActionResult<Kasutaja> GetKasutajaById(int id)
-        {
-            var kasutaja = _kasutajad.FirstOrDefault(k => k.Id == id);
-            if (kasutaja == null)
-            {
-                return NotFound("Kasutajat ei leitud.");
-            }
-            return kasutaja;
+            return await _context.Kasutajad.ToListAsync();
         }
     }
 }

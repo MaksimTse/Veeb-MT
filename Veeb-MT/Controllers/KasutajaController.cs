@@ -7,7 +7,7 @@ namespace Veeb_MT.Controllers
     [ApiController]
     public class KasutajaController : ControllerBase
     {
-        private static Kasutaja _kasutaja = new Kasutaja(1, "kasutajanimi", 1234, "Eesnimi", "Perenimi");
+        private static Kasutaja _kasutaja = new Kasutaja(1, "kasutajanimi", "1234", "Eesnimi", "Perenimi");
 
         // GET: kasutaja
         [HttpGet]
@@ -26,7 +26,7 @@ namespace Veeb_MT.Controllers
 
         // GET: kasutaja/muuda-parooli/5678
         [HttpGet("muuda-parooli/{uusParool}")]
-        public Kasutaja MuudaParooli(int uusParool)
+        public Kasutaja MuudaParooli(string uusParool)
         {
             _kasutaja.Parool = uusParool;
             return _kasutaja;

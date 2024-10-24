@@ -10,8 +10,8 @@ namespace Veeb_MT.Controllers
     public class KasutajaToodeController : ControllerBase
     {
         private static List<Kasutaja> _kasutajad = new List<Kasutaja>{
-            new Kasutaja(1, "kasutaja1", 1234, "Eesnimi1", "Perenimi1"),
-            new Kasutaja(2, "kasutaja2", 5678, "Eesnimi2", "Perenimi2")
+            new Kasutaja(1, "kasutaja1", "1234", "Eesnimi1", "Perenimi1"),
+            new Kasutaja(2, "kasutaja2", "5678", "Eesnimi2", "Perenimi2")
         };
 
         private static List<Toode> _tooted = new List<Toode>{

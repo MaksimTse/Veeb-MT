@@ -10,13 +10,15 @@ namespace Veeb_MT.Models
         public double Price { get; set; }
         public bool IsActive { get; set; }
 
+        public List<OstukorvToode> OstukorvTooted { get; set; }
+
         public Toode(int id, string nimi, double price, bool isActive)
         {
             Id = id;
             Nimi = nimi;
             Price = price;
             IsActive = isActive;
+            OstukorvTooted = new List<OstukorvToode>();
         }
     }
-
 }
