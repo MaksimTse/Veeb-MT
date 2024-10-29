@@ -11,7 +11,11 @@ namespace Veeb_MT.Models
         public string Eesnimi { get; set; }
         public string Perenimi { get; set; }
 
+<<<<<<< Updated upstream
         public Kasutaja(int id, string nimi, int parool, string eesnimi, string perenimi)
+=======
+        public Kasutaja(int id, string nimi, string parool, string eesnimi, string perenimi)
+>>>>>>> Stashed changes
         {
             Id = id;
             Nimi = nimi;

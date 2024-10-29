@@ -1,5 +1,15 @@
+<<<<<<< Updated upstream
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+=======
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Veeb_MT.Data;
+>>>>>>> Stashed changes
 using Veeb_MT.Models;
 
 namespace Veeb_MT.Controllers
@@ -17,12 +27,17 @@ namespace Veeb_MT.Controllers
         };
 
         [HttpGet]
+<<<<<<< Updated upstream
         // GET /tooted
         public List<Toode> Get()
+=======
+        public async Task<List<Toode>> Get()
+>>>>>>> Stashed changes
         {
             return _tooted;
         }
 
+<<<<<<< Updated upstream
         // GET /tooted/kustuta/1
         [HttpGet("kustuta/{index}")]
         public List<Toode> Delete(int index)
@@ -62,6 +77,8 @@ namespace Veeb_MT.Controllers
         }
 
 
+=======
+>>>>>>> Stashed changes
         // GET /tooted/lisa?id=1&nimi=Koola&hind=1.5&aktiivne=true
         [HttpGet("lisa")]
         public List<Toode> Add2([FromQuery] int id, [FromQuery] string nimi, [FromQuery] double hind, [FromQuery] bool aktiivne)
@@ -133,8 +150,12 @@ namespace Veeb_MT.Controllers
             {
                 return NotFound("Tooteid pole saadaval.");
             }
+<<<<<<< Updated upstream
             var kallimToode = _tooted.OrderByDescending(t => t.Price).FirstOrDefault();
             return kallimToode;
+=======
+            return Ok(kallimToode);
+>>>>>>> Stashed changes
         }
     }
 }
